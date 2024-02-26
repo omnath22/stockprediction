@@ -1,0 +1,484 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <title>StockPredictionAi</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<style>
+    body{
+        background-color:rgb(31,30,31);
+    }
+    #herosection{
+        width:100%;height:92vh;
+        
+        /* background: rgb(0,0,0);
+background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
+
+        
+        }
+       
+    #herosection h1,h2,h3{
+        color:white;
+
+    }
+    #herosection h1{
+      font-size:100px;
+      font-weight: 700;
+      -webkit-text-fill-color: #0000;
+    background: linear-gradient(90deg,#1b2e61 -17.39%,#2962ff .11%,#726fff 20.4%,#c883ff 37.89%,#ab4df8 56.09%,#d1007e 75.68%,#dc132b 96.67%,#541c1c 116.96%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    }
+    .logout a{
+      text-decoration: none;
+      color:white;
+    }
+    .loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  
+    opacity: 0.7;
+    z-index: 999; /* Ensure loader is displayed above other content */
+}
+
+.inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 5px solid #007bff;
+    border-top-color: transparent; /* Creates the spinning effect */
+    width: 70%;
+    height: 70%;
+    animation: spin 1s linear infinite; /* Animation for the inner circle */
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+        
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" style="border-bottom: 1px solid #414041;background-color: rgb(31, 30, 31);">
+        <div class="container">
+          <a class="navbar-brand" href="#" style="color:white">StockPredictionAi</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#" style="color:white;">Home</a>
+              </li>
+              
+            </ul>
+            <form class="d-flex" role="search" action="details" method="GET">
+              
+              <input class="form-control me-2" type="search" placeholder="Search stocks" aria-label="Search" name="tickername">
+              
+
+              <button type="button" class="nav-btn btn btn-primary login-logout" data-bs-toggle="modal" data-bs-target="#myModal">
+                Login/Signup
+              </button>
+              
+<button type="button" class="nav-btn btn btn-primary logout">
+  <a href="/signout">Logout</a>
+</button>
+
+            </form>
+          </div>
+        </div>
+      </nav>
+
+      <div id="herosection">
+        <div class="herosectioncontent" style="padding-top: 15%;"><h1 class="text-center">The Future of Investing</h1>
+        <h3 class="text-center">See What the AI Sees</h3>
+        <form class="d-flex" role="search" action="details" method="GET">
+            <input class="form-control mx-auto" style="width:40%; margin-top:2%" type="search" placeholder="Search stocks" aria-label="Search" name="tickername">
+          </form></div> 
+          <div class="loader">
+            <div class="inner"></div>
+        </div>
+      </div>
+
+<div class=" container infosection mb-5">
+  <div class="mx-auto" style="width:180px;height:35px;background: #1D2435; border-radius: 10px;">
+    <h5 class="text-center" style="line-height:35px;color: white;">About AI</h5></div>
+      <div class="container text-center" style="color:white;">
+        <div class="row" style="margin-top: 60px; align-items: center;">
+          <div class="col" style="display: flex;
+          justify-content: center;
+          align-items: center;">
+            <img src="https://media.istockphoto.com/id/1393224925/photo/robot-analyze-stock-market-big-data.jpg?s=2048x2048&w=is&k=20&c=NMQOfnli3LlMxQPdmaxhND0a9sg3wUJ9mAO5dMGYO24="  width="350px" height="300px">
+          </div>
+          <div class="col">
+            <h2 class="text-center pb-2">Predicting with AI</h2>
+            <div>
+              <h5 style="color:#7d7d7d;"> Artificial intelligence (AI) is rapidly changing the way we live and work, and one of its most impactful applications is in prediction. AI can be used to predict a wide range of things, from the weather to the stock market to the spread of disease.</h5></div>
+        </div>      
+          </div>
+          
+        </div>
+      
+
+
+      <div class="container text-center" style="color:white;">
+        <div class="row" style="padding-top: 10%;">
+          <div class="col">
+            <div>
+            <h2 class="text-center pb-2" style="margin-top: 5%;">How does AI prediction work?</h2>
+            <h5 style="color:#7d7d7d;">1. Data collection: The first step is to collect a large amount of data that is relevant to the prediction you want to make. This data can come from a variety of sources, such as sensors, databases, and social media.</h5>
+            <h5 style="color:#7d7d7d;">2. Data analysis: Once the data is collected, it needs to be analyzed and processed. This is often done using machine learning algorithms, which are able to identify patterns and relationships in the data.</h5>
+            <h5 style="color:#7d7d7d;">3.Model building: Based on the analysis of the data, a model is built that can be used to make predictions. This model can be a simple statistical model or a more complex deep learning model.</h5>
+        </div>
+          </div>
+          <div class="col" style="display: flex;
+          justify-content: center;
+          align-items: center;">
+            <img src="https://media.istockphoto.com/id/486819204/photo/it-background-encrypted-data-a04.jpg?s=2048x2048&w=is&k=20&c=Hi-VqrrlBAtOenxB_n942vih8l0a126x23XvnXIgClw=" alt="" width="300px" height="300px">
+            
+               
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+
+
+  
+    <div class="container newssection pt-5 pb-5">
+      <div class="mx-auto" style="width:180px;height:35px;background: #1D2435; border-radius: 10px;">
+      <h5 class="text-center" style="line-height:35px;color: white;">Latest in Market</h5></div>
+      <h2 class="text-center" style="margin-top: 30px;">Keep an eye on Latest News</h2>
+
+
+      <div class="row row-cols-1 row-cols-md-3 g-4" style="padding-top:5% ;padding-bottom:5%;">
+        {% for i in response.articles %}
+        <div class="col">
+          <a href="{{i.url}}" style="text-decoration: none;">
+          <div class="card h-100">
+            <img src="{{i.urlToImage}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{i.title}}</h5>
+              <p class="card-text"></p>
+            </div>
+          </div>
+          </a>
+        </div>
+       
+       
+        {% endfor %} 
+
+
+   
+
+
+  </div>
+  </div>
+
+
+
+  <div class="container newslettersection pt-4 pb-4 mb-5" style="background-image: url(&quot;https://www.toptal.com/designers/subtlepatterns/uploads/circle-blues.png&quot;); border-radius: 25px;">
+
+
+    <div class="container text-center">
+      <div class="row align-items-center">
+        <div class="col">
+          <h2 class="text-center">We track the Stock market buzz with our AI. Sign up to get in your inbox</h2>
+        </div>
+        <div class="col">
+          <div class="input-group mb-3 mx-auto" style="width:80%;">
+            <input type="text"class="form-control" placeholder="Enter Your Email Address" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Join Us</button>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+   
+
+    
+   
+  
+  </div>
+
+
+
+
+
+
+
+
+
+  <!-- Footer -->
+<footer class="text-center text-lg-start bg-body-tertiary text-muted pt-1">
+  <!-- Section: Social media -->
+
+  <!-- Section: Social media -->
+
+  <!-- Section: Links  -->
+  <section class="">
+    <div class="container text-center text-md-start mt-5">
+      <!-- Grid row -->
+      <div class="row mt-3">
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            StockPredictionAi
+          </h6>
+          <p>
+            See the Future of Finance: AI-Powered Stock Predictions
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+       
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            Useful links
+          </h6>
+          <p>
+            <a href="#!" class="text-reset">Home</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Disclaimer</a>
+          </p>
+          <p>
+         
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+          <p><i class="fas fa-home me-3"></i> Mumbai, India</p>
+          <p>
+            <i class="fas fa-envelope me-3"></i>
+            info@stockpredictionai.com
+          </p>
+          <p><i class="fas fa-phone me-3"></i> + 91 98197 39170</p>
+          <p><i class="fas fa-print me-3"></i> + 91 98197 39170</p>
+        </div>
+        <!-- Grid column -->
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links  -->
+
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2024 Copyright:
+    <a class="text-reset fw-bold" href="#">StockPredictionAi.com</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
+
+
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Welcome back!</h5>
+        <ul class="nav nav-pills" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab" aria-controls="pills-login" aria-selected="true">Login</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-signup-tab" data-bs-toggle="pill" data-bs-target="#pills-signup" type="button" role="tab" aria-controls="pills-signup" aria-selected="false">Signup</button>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-body">
+        
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab">
+            <form>
+             
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Username</label>
+                <input type="text" class="form-control emailinput" id="exampleFormControlInput1" placeholder="Username" name="email">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Password</label>
+                <input type="password" class="form-control passwordinput" id="exampleFormControlInput1" placeholder="Password" name="password">
+              </div>
+              
+              <div class="alert alert-danger" role="alert">
+                This is a danger alert—check it out!
+              </div>
+              <div class="alert alert-success" role="alert">
+                Login Success
+              </div>
+              <button type="button" class="btn btn-primary" id="b1" style="width: 100%;">Login</button>
+            </form>
+          </div>
+          <div class="tab-pane fade" id="pills-signup" role="tabpanel" aria-labelledby="pills-signup-tab">
+            <form>
+           
+              <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Username</label>
+              <input type="text" class="form-control signupusername" id="exampleFormControlInput1" placeholder="username" name="username">
+            </div>
+              
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Password</label>
+                <input type="password" class="form-control signuppassword" id="exampleFormControlInput1" placeholder="Password" name="password">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control signupconfirmpassword" id="exampleFormControlInput1" placeholder="Confirm Password" name="confirmpassword">
+              </div>
+              
+              <div class="alert alert-danger" role="alert">
+                This is a danger alert—check it out!
+              </div>
+              <div class="alert alert-success" role="alert">
+                Signin Success
+              </div>
+              <button type="button" id="b2" class="btn btn-primary" style="width: 100%;">
+              Signup</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% for message in messages %}
+  <script>
+    alert('{{ message }}');
+  </script>
+{% endfor %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $(".alert-danger").hide();  
+    $(".alert-success").hide();
+    $(".logout").hide();
+    $('.loginbutton').click()
+    $('.nav-pills a').on('click', function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+    function timeout(){
+    setTimeout(() => {
+  const loader = document.querySelector('.loader');
+  loader.style.display = 'none'; // Hide the loader after simulation
+}, 2000);
+}
+timeout();
+
+
+    $("#b1").click(function(){
+      var email = $('.emailinput').val();
+      var password = $('.passwordinput').val();
+      // alert(data);
+      $(".alert-danger").hide(); 
+      $.ajax({
+        url:'',
+        type:'get',
+        data:{
+          email: email,
+          password:password
+        },
+        success: function(response){
+          if(response.message == "no"){
+             $(".alert-danger").show();
+             $(".alert-danger").text("Wrong Uername or Password");
+          }else{
+            $(".alert-success").show();
+  
+            setTimeout(function() {$('#myModal').modal('hide');}, 2000);
+
+          //   authen = response.message;
+          // $(".login-logout").html('Logout');
+          $(".login-logout").hide();
+          $(".logout").show();
+          }
+         
+          // alert(response.message);
+
+          
+        }
+      });    
+
+  });
+
+
+  $("#b2").click(function(){
+      var username = $('.signupusername').val();
+      var password = $('.signuppassword').val();
+      var confirmpassword = $('.signupconfirmpassword').val();
+      if(password != confirmpassword){
+        $(".alert-danger").show();
+        $(".alert-danger").text("Password and confirm password doesnt match");
+        return;
+      }
+      // alert(data);
+      $(".alert-danger").hide(); 
+      $.ajax({
+        url:'',
+        type:'get',
+        data:{
+          email: username,
+          password:password,
+          confirmpassword:confirmpassword
+        },
+        success: function(response){
+          if(response.message == "no"){
+             $(".alert-danger").show();
+             $(".alert-danger").text("User already Present");
+          }else{
+            $(".alert-success").show();
+      
+            setTimeout(function() {$('#myModal').modal('hide');}, 2000);
+
+          //   authen = response.message;
+          // $(".login-logout").html('Logout');
+          $(".login-logout").hide();
+          $(".logout").show();
+          }
+         
+          // alert(response.message);
+
+          
+        }
+      });    
+
+  });
+
+});
+</script>
+
+
+</body>
+</html>
