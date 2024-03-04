@@ -9,4 +9,5 @@ urlpatterns = [
     path('disclaimer',views.disclaimer),
     path('signout',views.signout),
     path('chat/', views.chat_view, name='chat'),
+    path('watchlist',views.watchlist),
 ]

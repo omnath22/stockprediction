@@ -52,6 +52,12 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
       text-decoration: none;
       color:white;
     }
+    .custom-toast {
+  position: fixed;  /* Make the toast fixed to the viewport */
+  top: 10px;  /* Set top position from the top of the viewport */
+  right: 10px;  /* Set right position from the right of the viewport */
+  z-index: 1000;  /* Ensure the toast is displayed on top of other elements */
+}
 
         
 </style>
@@ -91,6 +97,16 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
 
 
       </div>
+      <div aria-live="polite" aria-atomic="true" class="position-relative"></div>
+      <div class="toast custom-toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+      </body>
 <div class="herosection container">
     <div class="stockheader p-5">
         <h1 style="display: inline;">{{tickername}}</h1>
@@ -104,8 +120,8 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
         <h3>{{tickervolume}}</h3>
         
       </div>
-      <div class="col">
-        <i class="fa-solid fa-plus" id="watch" style="border: 1px solid black;"></i> <p>Watchlist
+      <div class="col" id="watch">
+        <i id="icon" class="fa-solid fa-plus"  style="border: 1px solid black;"></i> <p>Watchlist
         </p>
       </div>
     </div>
@@ -388,26 +404,39 @@ var dataa = [trace,price_trace];
 
 Plotly.newPlot('myDiv', dataa, layout);
 $("#watch").click(function(){
-  $.ajax({
-  url:'/details',
-  type:'post',
+// alert("hi"); 
+$.ajax({
+  url:'',
+  type:'get',
   data:{
-    stock_symbol: tk,
+    stock_symbol:'{{ticker}}',
   },
   success: function(response){
-    if(response.message == "no"){
-        alert("Cannot add to watchlist");
-    }else{
-      
-      alert("Stock added successfully");
-    }
-    
-    // alert(response.message);
+    if(response.message){
+      // alert(response.message);
+      // Get the toast element and button
+      $(".toast-body").text(response.message);
+const toastEl = document.querySelector('.toast');
 
+
+  // Create a new toast instance from the element
+  const toast = new bootstrap.Toast(toastEl);
+
+  // Show the toast manually
+  toast.show();
+
+
+      
+    }
+       $("#icon").toggleClass("fa-plus fa-minus");
+    // alert(response.message);
+    
+
+    
+   
     
   }
-});    
-
+});   
 
 });
 

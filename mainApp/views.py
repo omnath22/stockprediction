@@ -274,21 +274,36 @@ def details(request):
                 print(stock_symbol)
                 if is_ajax(request=request):
                     print("inside signupajax to add symbol into watchlist")
-                    try:
-                        sql = """
-                        INSERT INTO watchlist (stock_name,username)
-                        VALUES (%s,%s)
-                        """
-                        cursor = connection.cursor()
-                        cursor.execute(sql, (stock_symbol, request.user))
-                        connection.commit()
-                        return JsonResponse({"message": "yes"})
-                        # print(request.user)
-                    except Exception:
-                        print(Exception)
-                        return JsonResponse({"message": "no"})
-                    
-                    
+                    sql = "SELECT * FROM watchlist WHERE username=%s AND stock_name=%s"
+                    cursor3 = connection.cursor()
+                    cursor3.execute(sql,(request.user,stock_symbol))
+                    myresult = cursor3.fetchone()
+                    if myresult:
+                        # means stock is in watchlist just have to remove
+                        try:
+                            sql = "DELETE FROM watchlist WHERE username=%s AND stock_name=%s"
+                            cursor4 = connection.cursor()
+                            cursor4.execute(sql,(request.user,stock_symbol))
+                            connection.commit()
+                            return JsonResponse({"message":"Stock Deleted from watchlist"})
+                        except Exception:
+                            return JsonResponse({"message":"Error in removing from watchlist"})
+                    else:
+                        try:
+                            sql = """
+                            INSERT INTO watchlist (stock_name,username)
+                            VALUES (%s,%s)
+                            """
+                            cursor = connection.cursor()
+                            cursor.execute(sql, (stock_symbol, request.user))
+                            connection.commit()
+                            return JsonResponse({"message": "Stock Added to watchlist"})
+                            # print(request.user)
+                        except Exception:
+                            print(Exception)
+                            return JsonResponse({"message": "Error in Adding to watchlist"})
+                        
+                        
                         
 
             else:
@@ -516,7 +531,11 @@ def details(request):
                     articles_with_sentiment.append({"title": title, "sentiment": sentiment})
                 return render(request, 'details.html',{'ticker':tk,'tickername': ticker.info['longName'],'tickercurrentprice':tickercurrentprice,'tickerchangefrompreviousclose':tickerchangefrompreviousclose,'tickerchangefrompreviousclosepercentage':tickerchangefrompreviousclosepercentage,'tickervolume':tickervolume,'finPoint':finPoint,'valPoint':valPoint,'momPoint':momPoint,'data':data_to_send,'sugg':sugg,'stockdata':stock_data_to_send,'response':articles_with_sentiment})
 
-
+def watchlist(request):
+    if not request.user.is_authenticated:
+        messages.success(request,'You must Log In')
+        return redirect('/')
+    return render(request,'watchlist.html')
 # def chatbot(request):
 #     chatbot_response = None
 #     if request.method == 'POST':
