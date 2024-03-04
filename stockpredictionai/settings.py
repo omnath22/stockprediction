@@ -10,7 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
+import os
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'stockpredictionai'
+    'stockpredictionai',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -125,3 +130,35 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Generate an app password from Google Account security settings for "omnathgupta11@gmail.com"
+app_password = "citt uoqw jjcg fbzs"  # Replace with your app password
+
+# Update settings.py with app password and other necessary settings
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'omnathgupta11@gmail.com'
+EMAIL_HOST_PASSWORD = app_password
+
+# settings.pyimport os
+
+# CELERY_BEAT_SCHEDULE_FILE = os.path.join(BASE_DIR, 'celerybeat-schedule.py')
+
+# CELERY_BROKER_URL = 'amqp://myuser:mypassword@localhost:5672/myvhost'  # Replace with your broker URL
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+# from celery.schedules import crontab
+
+# CELERY_BEAT_SCHEDULE = {
+#     'send-weekly-emails': {
+#         'task': 'your_app.tasks.send_weekly_email',
+#         'schedule': 60 ,  # Every week (in seconds)
+#     },
+# }

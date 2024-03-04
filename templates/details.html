@@ -52,12 +52,13 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
       text-decoration: none;
       color:white;
     }
+
         
 </style>
 </head>
 <body>
     <div class="stock-info-bg-light-blue">
-    <nav class="navbar navbar-expand-lg t1" style="border-bottom: 1px solid #414041;background-color: rgb(31, 30, 31);">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg t1" style="border-bottom: 1px solid #414041;background-color: rgb(31, 30, 31);">
         <div class="container">
           <a class="navbar-brand" href="#" style="color:white">StockPredictionAi</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,17 +69,22 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="#" style="color:white;">Home</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/disclaimer" style="color:white;">Disclaimer</a>
+              </li>
               
             </ul>
             <form class="d-flex" role="search" action="details" method="GET">
               <input class="form-control me-2" type="search" placeholder="Search stocks" aria-label="Search" name="tickername">
               
 
-           
               <button type="button" class="nav-btn btn btn-primary logout">
                 <a href="/signout">Logout</a>
-              </button>
+                
+                </button>
             </form>
+          </form>
+          
           </div>
         </div>
       </nav>
@@ -99,7 +105,7 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
         
       </div>
       <div class="col">
-        <i class="fa-solid fa-plus" style="border: 1px solid black;"></i> <p>Watchlist
+        <i class="fa-solid fa-plus" id="watch" style="border: 1px solid black;"></i> <p>Watchlist
         </p>
       </div>
     </div>
@@ -189,14 +195,32 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
 
       </div>
       {% if sugg in "GOOD TO BUY" %}
-      <div class="mt-5 mx-auto p-1" style="background-color: #D0E6DD; width:20%;margin-top: 100px;"> <h5 class="text-center my-auto" style="color: white;">{{sugg}}</h5></div>
+      <div class="mt-5 mx-auto p-1" style="background-color: #D0E6DD; width:20%;margin-top: 100px;"> <h5 class="text-center my-auto" style="color: black;">{{sugg}}</h5></div>
       {% else %}
-      <div class="mt-5 mx-auto p-1" style="background-color: #b6241a; width:20%;margin-top: 100px;"> <h5 class="text-center my-auto" style="color: white;">{{sugg}}</h5></div>
+      <div class="mt-5 mx-auto p-1" style="background-color: #b6241a; width:20%;margin-top: 100px;"> <h5 class="text-center my-auto" style="color: black;">{{sugg}}</h5></div>
       {% endif %}
 
   </div>
-  
+
+  <div class="container" style="margin-bottom: 100px;">
+    <h2 class="text-center" style="color: white;margin-bottom: 42px; ">Sentiment Analysis</h2>
+  {% for i in response %}
+
+  <div class="row row-cols-2 g-2 g-lg-3">
+    <div class="col-10">
+      <div class="p-3" style="color:white;">{{i.title}}</div>
+    </div>
+    <div class="col-2">
+      <div class="p-3" style="color:white;text-align: center;">{{i.sentiment}}</div>
+    </div>
+    </div>
+   
+        {% endfor %} 
+</div>
+
+
   <!-- Footer -->
+
 <footer class="text-center text-lg-start bg-body-tertiary text-muted pt-1">
   <!-- Section: Social media -->
 
@@ -231,7 +255,7 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
             <a href="#!" class="text-reset">Home</a>
           </p>
           <p>
-            <a href="#!" class="text-reset">Disclaimer</a>
+            <a href="/disclaimer" class="text-reset">Disclaimer</a>
           </p>
           <p>
          
@@ -268,6 +292,8 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
 <div id="data" style="display: none;">{{data}}</div>
 <div id="stockdata" style="display:none;">{{stockdata}}</div>
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
@@ -322,6 +348,7 @@ const trace = {
   mode: 'lines',
   name: 'Predicted Stock Price'
 };
+
 const price_trace ={
   x: timestamps_stock,
   y: price_stock,
@@ -357,9 +384,33 @@ const layout = {
   }
 };
 
-var data = [trace,price_trace];
+var dataa = [trace,price_trace];
 
-Plotly.newPlot('myDiv', data, layout);
+Plotly.newPlot('myDiv', dataa, layout);
+$("#watch").click(function(){
+  $.ajax({
+  url:'/details',
+  type:'post',
+  data:{
+    stock_symbol: tk,
+  },
+  success: function(response){
+    if(response.message == "no"){
+        alert("Cannot add to watchlist");
+    }else{
+      
+      alert("Stock added successfully");
+    }
+    
+    // alert(response.message);
+
+    
+  }
+});    
+
+
+});
+
 
 
 

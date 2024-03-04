@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="style.css">
     <title>StockPredictionAi</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
     body{
         background-color:rgb(31,30,31);
@@ -67,6 +68,69 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
     animation: spin 1s linear infinite; /* Animation for the inner circle */
 }
 
+
+#chatbot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 2;
+  background-color: #FFFEFE;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#chatbot .chat-header {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px 10px 10px;
+  font-weight: bold;
+  text-align: center;
+}
+.chat-header{
+  display:flex;
+  justify-content: space-between;
+}
+
+#chatbot .chat-body {
+  padding: 10px;
+  height: 250px;
+  overflow-y: auto;
+}
+
+#chatbot .chat-input {
+  width: calc(100% - 20px);
+  margin: 10px;
+}
+
+#chatbot .chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#chatbot .chat-message {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+.minimized {
+  height: 46px;
+  /* Add other styles for minimizing, like opacity 0 or display: none; */
+}
+#minimize{
+  cursor: pointer;
+}
+
+
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -75,7 +139,7 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
 </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg" style="border-bottom: 1px solid #414041;background-color: rgb(31, 30, 31);">
+       <nav class="navbar navbar-dark bg-dark navbar-expand-lg t1" style="border-bottom: 1px solid #414041;background-color: rgb(31, 30, 31);">
         <div class="container">
           <a class="navbar-brand" href="#" style="color:white">StockPredictionAi</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,6 +149,12 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="#" style="color:white;">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/disclaimer" style="color:white;">Disclaimer</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fullscreenModal" style="color:white;">Pricing</a>
               </li>
               
             </ul>
@@ -105,7 +175,64 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
           </div>
         </div>
       </nav>
+      
+      
+      <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-labelledby="fullscreenModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="fullscreenModalLabel">Pricing</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row row-cols-1 row-cols-md-3 g-4" style="margin-left: 60px;margin-top: 60px;">
+                <div class="col">
+                  <div class="card text-center" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Basic</h5>
+                      <p class="card-text">Free</p>
+                      <ul class="card-featues" style="list-style-type: none;">
+                        <li>5 Predictions/Day</li>
+                        <li>Random 1 Stock Predicion send on Email/Week</li>
+                      </ul>
+                      <a href="#" class="btn btn-success">Selected</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card text-center" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Pro</h5>
+                      <p class="card-text">$19/month</p>
+                      <ul class="card-featues" style="list-style-type: none;">
+                        <li>20 Predictions/Day</li>
+                        <li>Random 2 Stock Predicion send on Email/Week</li>
+                      </ul>
+                      <a href="#" class="btn btn-primary">Select</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card text-center" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Enterprise</h5>
+                      <p class="card-text">$49/month</p>
+                      <ul class="card-featues" style="list-style-type: none;">
+                        <li>50 Predictions/Day</li>
+                        <li>Random 5 Stock Predicion send on Email/Week</li>
+                      </ul>
+                      <a href="#" class="btn btn-primary">Select</a>
+                    </div>
+                  </div>
+                </div>
 
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div id="herosection">
         <div class="herosectioncontent" style="padding-top: 15%;"><h1 class="text-center">The Future of Investing</h1>
         <h3 class="text-center">See What the AI Sees</h3>
@@ -117,6 +244,24 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
         </div>
       </div>
 
+      <div id="chatbot">
+        <div class="chat-header"><h6>Chatbot</h6><div id="minimize"><i class="fa-solid fa-angle-down"></i></div></div>
+        <div class="chat-body" id="chatBody">
+          <!-- Chat messages will be displayed here -->
+        </div>
+        <form method="post">
+          {% csrf_token %}
+
+        <input type="text" class="chat-input" id="chatInput" name="user_message" placeholder="Type a message...">
+        <button class="chat-submit" id="chatSubmit" type="submit">Send</button>
+   
+    </form>
+    {% if user_message %}
+        <p>You: {{ user_message }}</p>
+        <p>Chatbot: {{ chatbot_response }}</p>
+    {% endif %}
+      </div>
+      
 <div class=" container infosection mb-5">
   <div class="mx-auto" style="width:180px;height:35px;background: #1D2435; border-radius: 10px;">
     <h5 class="text-center" style="line-height:35px;color: white;">About AI</h5></div>
@@ -204,9 +349,11 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
           <h2 class="text-center">We track the Stock market buzz with our AI. Sign up to get in your inbox</h2>
         </div>
         <div class="col">
-          <div class="input-group mb-3 mx-auto" style="width:80%;">
-            <input type="text"class="form-control" placeholder="Enter Your Email Address" aria-label="Recipient's username" aria-describedby="button-addon2">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Join Us</button>
+          <div class="input-group mb-3" style="width:80%; margin-left: auto;">
+            <form class="d-flex" role="search" action="subscribe" method="get">
+            <input type="email" class="form-control" id="joinusemail" name="joinusinput" placeholder="Enter Your Email Address" aria-label="Recipient's username" aria-describedby="button-addon2" required>
+            <button class="btn btn-outline-secondary" type="submit" id="joinusbtn" style="width:100px;">Join Us</button>
+            </form>
           </div>
         </div>
        
@@ -262,7 +409,7 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
             <a href="#!" class="text-reset">Home</a>
           </p>
           <p>
-            <a href="#!" class="text-reset">Disclaimer</a>
+            <a href="/disclaimer" class="text-reset">Disclaimer</a>
           </p>
           <p>
          
@@ -381,6 +528,7 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
 
 <script>
   $(document).ready(function () {
+    
     $(".alert-danger").hide();  
     $(".alert-success").hide();
     $(".logout").hide();
@@ -402,6 +550,7 @@ timeout();
       var email = $('.emailinput').val();
       var password = $('.passwordinput').val();
       // alert(data);
+   
       $(".alert-danger").hide(); 
       $.ajax({
         url:'',
@@ -454,7 +603,7 @@ timeout();
           confirmpassword:confirmpassword
         },
         success: function(response){
-          if(response.message == "no"){
+          if(response.message == "no"){44444448
              $(".alert-danger").show();
              $(".alert-danger").text("User already Present");
           }else{
@@ -476,7 +625,89 @@ timeout();
 
   });
 
+
+  // JavaScript for Chatbot
+const chatBody = document.getElementById('chatBody');
+const chatInput = document.getElementById('chatInput');
+const chatSubmit = document.getElementById('chatSubmit');
+
+chatSubmit.addEventListener('click', (event) => {
+  event.preventDefault();
+  const message = chatInput.value.trim();
+ 
+  if (message !== '') { 
+    // alert(message);
+    appendMessage('You', message);
+    // Here, you can send the message to your backend for processing
+    // and receive a response from the chatbot
+    // For demonstration purposes, let's just echo back the same message
+    // setTimeout(() => {
+    //   appendMessage('Chatbot', message);
+    //   chatInput.value = '';
+    //   chatBody.scrollTop = chatBody.scrollHeight;
+    // }, 500);
+
+    $.ajax({
+        url:'chat/',
+        type:'get',
+        data:{
+          message:message
+        },
+        success: function(response){
+          if(response.chatbot_response){
+            setTimeout(() => {
+      appendMessage('Chatbot', response.chatbot_response);
+      chatInput.value = '';
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }, 500);
+        }
+      }
 });
+// fetch('chat/', {
+//   method: 'POST',
+//   headers: {
+//     'Content-Type': 'application/json',
+//     'X-CSRFToken': document.querySelector('input[name=csrftoken]').value // Get token from hidden field
+//   },
+//   body: JSON.stringify({ message: message })
+// })
+// .then(response => response.json())
+// .then(data => {
+//    console.log(data);
+// })
+// .catch(error => {
+//   console.error(error);
+// });
+
+        
+
+
+
+
+  }
+});
+
+function appendMessage(sender, message) {
+  const div = document.createElement('div');
+  div.className = 'chat-message';
+  div.innerHTML = `<strong>${sender}:</strong> ${message}`;
+  chatBody.appendChild(div);
+
+}
+$("#minimize").click(function(){
+$("#chatbot").toggleClass("minimized");
+});
+
+
+
+
+setTimeout(() => {
+appendMessage('Chatbot', "Hi! ask me any question related to finance");
+  chatInput.value = '';
+  chatBody.scrollTop = chatBody.scrollHeight;
+  }, 2000);
+        
+  });
 </script>
 
 
