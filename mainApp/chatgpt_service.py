@@ -1,6 +1,6 @@
 import requests
 
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = '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'
 OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
 
 def get_chat_response(prompt):

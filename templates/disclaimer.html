@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disclaimer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <title>StockPredictionAi</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
     <style>
@@ -14,7 +12,6 @@
     font-family: Arial, sans-serif;
     margin: 0;
     background-color: #222; /* Dark background */
-    color: #eee; /* Light text color */
 }
 
 .container2 {
@@ -24,6 +21,7 @@
     background-color: #333; /* Slightly lighter container for contrast */
     border: 1px solid #555; 
     border-radius: 5px;
+    color:#eee;
 }
 
 h1 {
@@ -39,25 +37,32 @@ p {
     line-height: 1.5;
     margin-bottom: 15px;
 }
-.logout a{
-      text-decoration: none;
-      color:white;
-    }
+a{
+  color:white;
+  text-decoration: none;
+}
 </style>
 </head>
-<body><nav class="navbar navbar-expand-lg" style="border-bottom: 1px solid #414041;background-color: rgb(31, 30, 31);">
+<body>
+  <nav class="navbar navbar-dark bg-dark navbar-expand-lg t1" style="border-bottom: 1px solid #414041;background-color: rgb(31, 30, 31);">
     <div class="container">
-      <a class="navbar-brand" href="#" style="color:white">StockPredictionAi</a>
+      <a class="navbar-brand" href="/" style="color:white">StockPredictionAi</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#" style="color:white;">Home</a>
+            <a class="nav-link active" aria-current="page" href="/" style="color:white;">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="/disclaimer" style="color:white;">Disclaimer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fullscreenModal" style="color:white;">Pricing</a>
+          </li>
+          <li class="nav-item watchlist">
+            <a class="nav-link" aria-current="page" href="/watchlist" style="color:white;">Watchlist</a>
           </li>
           
         </ul>
@@ -65,22 +70,79 @@ p {
           
           <input class="form-control me-2" type="search" placeholder="Search stocks" aria-label="Search" name="tickername">
           
-
-          <button type="button" class="nav-btn btn btn-primary login-logout" data-bs-toggle="modal" data-bs-target="#myModal">
-            Login/Signup
-          </button>
-          
-
- <button type="button" class="nav-btn btn btn-primary logout">
+{% if authen == 0 %}
+<button type="button" class="nav-btn btn btn-primary login-logout" data-bs-toggle="modal" data-bs-target="#myModal">
+  Login/Signup
+</button>
+{% else %}
+<button type="button" class="nav-btn btn btn-primary logout">
 <a href="/signout">Logout</a>
 </button>
+{% endif %}
+<button type="button" class="nav-btn btn btn-primary logout2">
+  <a href="/signout">Logout</a>
+  </button>
         </form>
         
         
       </div>
     </div>
   </nav>
+  <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-labelledby="fullscreenModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="fullscreenModalLabel">Pricing</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row row-cols-1 row-cols-md-3 g-4" style="margin-left: 60px;margin-top: 60px;">
+            <div class="col">
+              <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Basic</h5>
+                  <p class="card-text">Free</p>
+                  <ul class="card-featues" style="list-style-type: none;">
+                    <li>5 Predictions/Day</li>
+                    <li>Random 1 Stock Predicion send on Email/Week</li>
+                  </ul>
+                  <a class="btn btn-success btn-primary selected" id="btn-1">Selected</a>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Pro</h5>
+                  <p class="card-text">$19/month</p>
+                  <ul class="card-featues" style="list-style-type: none;">
+                    <li>20 Predictions/Day</li>
+                    <li>Random 2 Stock Predicion send on Email/Week</li>
+                  </ul>
+                  <a class="btn btn-primary selected" id="btn-2">Select</a>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Enterprise</h5>
+                  <p class="card-text">$49/month</p>
+                  <ul class="card-featues" style="list-style-type: none;">
+                    <li>50 Predictions/Day</li>
+                    <li>Random 5 Stock Predicion send on Email/Week</li>
+                  </ul>
+                  <a class="btn btn-primary selected" id="btn-3">Select</a>
+                </div>
+              </div>
+            </div>
 
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
     <div class="container2">
         <h1>Disclaimer</h1>
         <h2>1. Informational Purposes Only:</h2>
@@ -253,13 +315,24 @@ p {
   {% endfor %}
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  
+  <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
   <script>
     $(document).ready(function () {
+      const baseRequest = {
+  apiVersion: 2,
+  apiVersionMinor: 0
+};
+      function onGooglePayLoaded(){
+        const googlePayClient = 
+        new google.payments.api.PaymentsClient({
+          environment:'TEST'
+        });
+      }
        
         $(".alert-danger").hide();  
       $(".alert-success").hide();
-      $(".logout").hide();
+      // $(".logout").hide();
+      $(".logout2").hide()
       $('.loginbutton').click()
       $('.nav-pills a').on('click', function (e) {
         e.preventDefault();
@@ -272,7 +345,79 @@ p {
   }, 2000);
   }
   timeout();
-  
+  var plan_selected_from_server = "{{planselected}}";
+// alert(plan_selected_from_server);
+if(plan_selected_from_server == "Basic"){
+$(".selected").removeClass("btn-success");
+$(".selected").text("select");
+$("#btn-1").addClass("btn-success");
+$("#btn-1").text("Selected");
+}
+else if(plan_selected_from_server == "Pro"){
+  $(".selected").removeClass("btn-success");
+$(".selected").text("select");
+$("#btn-2").addClass("btn-success");
+$("#btn-2").text("Selected");
+}
+else if(plan_selected_from_server == "Enterprise"){
+  $(".selected").removeClass("btn-success");
+$(".selected").text("select");
+$("#btn-3").addClass("btn-success");
+$("#btn-3").text("Selected");
+}else{
+  $(".selected").removeClass("btn-success");
+  $(".selected").text("select");
+}
+
+
+
+
+$(".selected").click(function(){
+  var planselect = "";
+  var buttonId = this.id;
+  if(this.id == "btn-1"){
+    // alert(this.id);
+    planselect = "Basic";
+  }
+  if(this.id == "btn-2"){
+    // alert(this.id);
+    planselect = "Pro";
+  }
+  if(this.id == "btn-3"){
+    // alert(this.id);
+    planselect = "Enterprise";
+  }
+
+  $.ajax({
+        url:'/selectPlan',
+        type:'get',
+        data:{
+          plan:planselect
+        },
+        success: function(response){
+          if(response.status == "ok"){
+           alert(response.message);
+          //  alert(buttonId);
+          $(".selected").removeClass("btn-success").addClass("btn-primary");
+          $(".selected").text("select");
+           $("#"+buttonId).removeClass("btn-primary").addClass("btn-success !important");
+           $("#"+buttonId).text("Selected");
+
+          }else{
+            alert(response.status);
+          }
+         
+          // alert(response.message);
+
+          
+        }
+      });    
+
+  });
+
+
+
+
   
       $("#b1").click(function(){
         var email = $('.emailinput').val();
@@ -292,13 +437,36 @@ p {
                $(".alert-danger").text("Wrong Uername or Password");
             }else{
               $(".alert-success").show();
-    
+              
               setTimeout(function() {$('#myModal').modal('hide');}, 2000);
-  
+              var plan_selected_from_server = response.planselected;
+// alert(plan_selected_from_server);
+if(plan_selected_from_server == "Basic"){
+$(".selected").removeClass("btn-success");
+$(".selected").text("select");
+$("#btn-1").addClass("btn-success");
+$("#btn-1").text("Selected");
+}
+else if(plan_selected_from_server == "Pro"){
+  $(".selected").removeClass("btn-success");
+$(".selected").text("select");
+$("#btn-2").addClass("btn-success");
+$("#btn-2").text("Selected");
+}
+else if(plan_selected_from_server == "Enterprise"){
+  $(".selected").removeClass("btn-success");
+$(".selected").text("select");
+$("#btn-3").addClass("btn-success");
+$("#btn-3").text("Selected");
+}else{
+  $(".selected").removeClass("btn-success");
+  $(".selected").text("select");
+}
+
             //   authen = response.message;
             // $(".login-logout").html('Logout');
             $(".login-logout").hide();
-            $(".logout").show();
+            $(".logout2").show();
             }
            
             // alert(response.message);
@@ -330,18 +498,20 @@ p {
             confirmpassword:confirmpassword
           },
           success: function(response){
-            if(response.message == "no"){
-               $(".alert-danger").show();
-               $(".alert-danger").text("User already Present");
+            if(response.status == "no"){
+            $(".alert-danger").show();
+            $(".alert-danger").text(response.message);
             }else{
               $(".alert-success").show();
         
               setTimeout(function() {$('#myModal').modal('hide');}, 2000);
-  
+              $(".selected").text("select");
+            $("#btn-1").addClass("btn-success");
+            $("#btn-1").text("Selected");
             //   authen = response.message;
             // $(".login-logout").html('Logout');
             $(".login-logout").hide();
-            $(".logout").show();
+            $(".logout2").show();
             }
            
             // alert(response.message);
