@@ -28,7 +28,7 @@ import openai
 from .chatgpt_service import get_chat_response
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
+from pandas_datareader import DataReader
 
 # Set your OpenAI API key
 openai.api_key = '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'
@@ -63,7 +63,7 @@ def sendDataBasedOnCategory(data_list):
 
                 myresult = mycursor2.fetchone()
                 print(myresult)
-                subject = 'Your Weekly Newsletter - Stockpredictionai'
+                subject = 'Your Weekly Stock Update - Stockpredictionai'
                 body = """**Investment Insights:**"""+myresult[0]+" -- "+myresult[1]+""""
     """
                 from_email = 'omnathgupta11@gmail.com'
@@ -90,7 +90,7 @@ def sendDataBasedOnCategory(data_list):
                 rows = mycursor3.fetchall()
                 print(rows)
 
-                subject = 'Your Weekly Newsletter - Stockpredictionai'
+                subject = 'Your Weekly Stock Update - Stockpredictionai'
                 body = """**Investment Insights:**"""+rows[0][0]+" -- "+rows[0][1]+"...\n" +rows[1][0]+" -- "+rows[1][1]+ """
     """
                 from_email = 'omnathgupta11@gmail.com'
@@ -117,7 +117,7 @@ def sendDataBasedOnCategory(data_list):
                 rows = mycursor2.fetchall()
                 print(rows)
 
-                subject = 'Your Weekly Newsletter - Stockpredictionai'
+                subject = 'Your Weekly Stock Update - Stockpredictionai'
                 body = """**Investment Insights:**"""+rows[0][0]+" -- "+rows[0][1]+"...\n" +rows[1][0]+" -- "+rows[1][1]+"...\n" +rows[2][0]+" -- "+rows[2][1]+"...\n" +rows[3][0]+" -- "+rows[3][1]+"...\n" +rows[4][0]+" -- "+rows[4][1]+ """
     """
                 from_email = 'omnathgupta11@gmail.com'
@@ -481,6 +481,25 @@ def selectPlan(request):
                     return JsonResponse({"message":"error"})
 
 
+
+def check_yahoo_data(symbol):
+    flag=1
+    try:
+        # Attempt to fetch data with a short start/end date range
+        data = DataReader(symbol, "yahoo", start="2024-03-18", end="2024-03-18")
+    except (KeyError, ValueError, ConnectionError):
+        # Handle exceptions related to no data availability
+        print(e)
+        flag=0
+        return flag
+    except Exception as e:
+        # Catch unexpected errors and print a message
+        print(f"Unexpected error: {e}")
+        flag=0
+        return flag
+    return flag
+
+
 def details(request):
     # print(request.GET)
     if not request.user.is_authenticated:
@@ -555,7 +574,17 @@ def details(request):
                     messages.success(request,'You Have exceeded your limit upgrade your plan')
                     return redirect('/')
                 else:
+                    tk = (request.GET['tickername'])
+                    tkres = tk  + ".BO"
+                    ticker = yf.Ticker(tkres)
+                    try:
+                        ticker.info['currentPrice']
+                    except Exception as e:
+                        print(e)
+                        return render(request,"404page.html")
                         
+
+
                     sql = "UPDATE auth_user SET totalPrediction = %s WHERE username = %s"
                     val = (myresult[0] +1,request.user)  # Replace with actual values
                     mycursor = connection.cursor()
@@ -567,15 +596,14 @@ def details(request):
 
 
                     isStockUnderWatch =  0
-                    tk = (request.GET['tickername'])
-                    tkres = tk  + ".BO"
+                    
                     # url = 'https://www.alphavantage.co/query?function=OVERVIEW&symbol=ioc&apikey=SF2KJLRRW7BRU3YD'
                     # r = requests.get(url)
                     # data = r.json()
 
                     # print(data)
 
-                    ticker = yf.Ticker(tkres)
+                    
                     data = ticker.history(interval="1wk", period="5y")
                     short_ema = data["Close"].ewm(span=12, min_periods=12).mean()
                     long_ema = data["Close"].ewm(span=26, min_periods=26).mean()
