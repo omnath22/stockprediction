@@ -10,7 +10,7 @@ from django.http import HttpResponse, JsonResponse
 # from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.hashers import make_password
 from django.contrib import messages
-from datetime import date
+from datetime import date, timedelta
 from joblib import load
 from prophet import Prophet
 from prophet.plot import plot_plotly
@@ -341,9 +341,9 @@ def home(request):
                             login(request,user)
                             authen = 1
                             #updating the columns
-                            sql = "UPDATE auth_user SET email = %s, totalPrediction = %s,date = %s,plan = %s WHERE username = %s"
+                            sql = "UPDATE auth_user SET email = %s, totalPrediction = %s,date = %s,plan = %s,dateofpayment = %s WHERE username = %s"
                             formatted_date_str = date.today().strftime("%Y-%m-%d")  # Format: YYYY-MM-DD
-                            val = (emailfromsignup,0,formatted_date_str,"Basic",email)  # Replace with actual values
+                            val = (emailfromsignup,0,formatted_date_str,"Basic",formatted_date_str,email)  # Replace with actual values
                             mycursor = connection.cursor()
                             # Execute the update query
                             mycursor.execute(sql, val)
@@ -462,8 +462,31 @@ def selectPlan(request):
                 if is_ajax(request=request):
                     print("inside plan to be selected")
                     try:
-                        sql = "UPDATE auth_user SET plan = %s WHERE username = %s"
-                        val = (plan,request.user)  # Replace with actual values
+                        formatted_date_str = date.today().strftime("%Y-%m-%d") 
+                        
+                        # Parse the formatted string into a date object
+                        date_obj = date.fromisoformat(formatted_date_str)
+
+                        # Use timedelta to add one month
+                        one_month_delta = timedelta(days = 31)  # Adjust for months with less than 31 days if needed
+
+                        # Calculate the date one month ahead (considering potential adjustments)
+                        next_month_date = date_obj + one_month_delta
+
+                        # Handle cases where the next month might have less days than the current month's day
+                        if next_month_date.day > date_obj.day:
+                        # Set the day to the last day of the next month
+                            next_month_date = next_month_date.replace(day=28)  # Start with 28 to handle February
+                            while next_month_date.month == date_obj.month + 1:  # Loop until it's actually next month
+                                next_month_date = next_month_date.replace(day=next_month_date.day - 1)
+
+                        # Format the resulting date object back to the desired string
+                        new_formatted_date_str = next_month_date.strftime("%Y-%m-%d")
+
+                        # Print the new formatted date string
+                        print(new_formatted_date_str)
+                        sql = "UPDATE auth_user SET plan = %s,dateofpayment = %s,duedateofpayment = %s WHERE username = %s"
+                        val = (plan,formatted_date_str,new_formatted_date_str,request.user)  # Replace with actual values
                         mycursor = connection.cursor()
                         # Execute the update query
                         mycursor.execute(sql, val)
@@ -550,7 +573,7 @@ def details(request):
 
             else:
                 try:
-                    sql = "SELECT totalPrediction,plan FROM auth_user WHERE username=%s"
+                    sql = "SELECT totalPrediction,plan,duedateofpayment FROM auth_user WHERE username=%s"
                     val = (request.user,)
                     mycursor = connection.cursor()
                     mycursor.execute(sql, val)
@@ -560,7 +583,8 @@ def details(request):
                     print(e)
                 
                 
-
+                today_date = date.fromisoformat(date.today().strftime("%Y-%m-%d"))
+                formatted_date_str = date.today().strftime("%Y-%m-%d")
                 #check if user exceed their limit if yes then redirect with message
                 #you have exceeded your limit upgrade
                 if myresult[1] == "Basic":
@@ -572,6 +596,16 @@ def details(request):
                 
                 if myresult[0] > myr:
                     messages.success(request,'You Have exceeded your limit upgrade your plan')
+                    return redirect('/')
+                elif (myresult[1]=="Pro" or myresult[1]=="Enterprise") and myresult[2] < today_date:
+                #check if it is one month if it is then prompt pay again
+                    sql = "UPDATE auth_user SET plan = %s,totalPrediction = %s,dateofpayment = NULL,duedateofpayment = NULL WHERE username = %s"
+                    val = ("Basic",0,request.user)  # Replace with actual values
+                    mycursor = connection.cursor()
+                    # Execute the update query
+                    mycursor.execute(sql, val)
+                    connection.commit()
+                    messages.success(request,'You have ended your monthly subscription plan.Select plan again')
                     return redirect('/')
                 else:
                     tk = (request.GET['tickername'])
@@ -964,3 +998,5 @@ def chat_view(request):
         chatbot_response = get_chat_response(user_message)
         return JsonResponse({'user_message': user_message, 'chatbot_response': chatbot_response})
 
+def payment(request):
+    return render(request,"payment.html")

@@ -11,4 +11,5 @@ urlpatterns = [
     path('chat/', views.chat_view, name='chat'),
     path('watchlist',views.watchlist),
     path('selectPlan',views.selectPlan),
+     path('payment',views.payment),
 ]

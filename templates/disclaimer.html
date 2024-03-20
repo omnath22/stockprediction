@@ -375,43 +375,52 @@ $("#btn-3").text("Selected");
 $(".selected").click(function(){
   var planselect = "";
   var buttonId = this.id;
-  if(this.id == "btn-1"){
-    // alert(this.id);
-    planselect = "Basic";
-  }
-  if(this.id == "btn-2"){
-    // alert(this.id);
-    planselect = "Pro";
-  }
-  if(this.id == "btn-3"){
-    // alert(this.id);
-    planselect = "Enterprise";
+  var buttontxt = this.text;
+  // alert(buttontxt);
+  if(buttontxt === "Selected"){
+    return;
+  }else{
+    var plan_selected_from_server = "{{planselected}}";
+
+if(plan_selected_from_server == "Enterprise"){
+return;
+}else if(plan_selected_from_server == "Pro"){
+ if(buttonId == "btn-3"){
+  window.location.href = "payment";  // Replace with your target URL
+ }else{
+  return;
+ }
+}
+    
+    window.location.href = "payment";  // Replace with your target URL
+
   }
 
-  $.ajax({
-        url:'/selectPlan',
-        type:'get',
-        data:{
-          plan:planselect
-        },
-        success: function(response){
-          if(response.status == "ok"){
-           alert(response.message);
-          //  alert(buttonId);
-          $(".selected").removeClass("btn-success").addClass("btn-primary");
-          $(".selected").text("select");
-           $("#"+buttonId).removeClass("btn-primary").addClass("btn-success !important");
-           $("#"+buttonId).text("Selected");
 
-          }else{
-            alert(response.status);
-          }
+  // $.ajax({
+  //       url:'/selectPlan',
+  //       type:'get',
+  //       data:{
+  //         plan:planselect
+  //       },
+  //       success: function(response){
+  //         if(response.status == "ok"){
+  //          alert(response.message);
+  //         //  alert(buttonId);
+  //         $(".selected").removeClass("btn-success").addClass("btn-primary");
+  //         $(".selected").text("select");
+  //          $("#"+buttonId).removeClass("btn-primary").addClass("btn-success !important");
+  //          $("#"+buttonId).text("Selected");
+
+  //         }else{
+  //           alert(response.status);
+  //         }
          
-          // alert(response.message);
+  //         // alert(response.message);
 
           
-        }
-      });    
+  //       }
+  //     });    
 
   });
 

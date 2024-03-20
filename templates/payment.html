@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Payment Page</title>
+  <style>
+  body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+.payment-form {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input, button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #444;
+}
+
+p {
+  text-align: center;
+  font-size: 0.8em;
+  color: #aaa;
+}
+
+</style>
+</head>
+<body>
+  <section class="payment-form">
+    <h1>Secure Payment</h1>
+
+    <form action="#">  <label for="name">Name on Card:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="card-number">Card Number:</label>
+      <input type="text" id="card-number" name="card-number" inputmode="numeric" pattern="[0-9]{16}" required>
+
+      <label for="expiry">Expiry Date:</label>
+      <input type="month" id="expiry" name="expiry" required>
+
+      <label for="cvv">CVV:</label>
+      <input type="text" id="cvv" name="cvv" inputmode="numeric" pattern="[0-9]{3}" required>
+       <label for="planInput">Plan:</label>
+<input list="plans" id="planInput" name="plan" placeholder="Select a plan">
+<datalist id="plans">
+  <option value="Basic">Basic</option> 
+  <option value="Pro">Pro</option>
+  <option value="Enterprise">Enterprise</option>
+</datalist>
+<label>Price:</label>
+<input type="text" id="price" value="This text is read-only" readonly>
+
+
+
+      <button type="button">Pay Now</button>
+    </form>
+
+    <p>**Note:** This is a demonstration page. Payment information is not processed.</p>
+  </section>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+  $("#planInput").change(function(){
+    // alert($("#planInput").val());
+    var plan = $("#planInput").val();
+    if(plan == "Basic"){
+        $("#price").val("$ 0");
+    }
+    else if(plan == "Pro"){
+        $("#price").val("$ 19");
+    }else{
+        $("#price").val("$ 49");
+    }
+  });
+  $("button").click(function(){
+    var plan = $("#planInput").val();
+    var name = $("#name").val();
+    var card_number = $("#card-number").val();
+    var cvv = $("#cvv").val();
+    var expiry = $("#expiry").val();
+    if(name == ""|| card_number == "" ||cvv==""||expiry==""){
+        alert("Invalid information");
+    }else{
+
+
+    $.ajax({
+        url:'/selectPlan',
+        type:'get',
+        data:{
+          plan:plan
+        },
+        success: function(response){
+          if(response.status == "ok"){
+           alert(response.message);
+          //  alert(buttonId);
+          window.location.href = "/";
+
+          }else{
+            alert(response.status);
+          }
+         
+          // alert(response.message);
+
+          
+        }
+      });
+  
+    }
+    });
+
+  </script>
+</body>
+</html>
