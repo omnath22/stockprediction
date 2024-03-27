@@ -58,7 +58,15 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
   right: 10px;  /* Set right position from the right of the viewport */
   z-index: 1000;  /* Ensure the toast is displayed on top of other elements */
 }
-
+h5{
+  font-size: 1.5rem;
+}
+.card-title{
+  font-weight: 700;
+}
+.selected{
+  width:100%;
+}
         
 </style>
 </head>
@@ -66,7 +74,7 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
     <div class="stock-info-bg-light-blue">
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg t1" style="border-bottom: 1px solid #414041;background-color: rgb(31, 30, 31);">
         <div class="container">
-          <a class="navbar-brand" href="/" style="color:white">StockPredictionAi</a>
+          <a class="navbar-brand" href="/" style="color:white"><img style="width: 220px;" src="/static/2.png" alt="StockPredictionAi"></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -128,7 +136,7 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
                       <h5 class="card-title">Basic</h5>
                       <p class="card-text">Free</p>
                       <ul class="card-featues" style="list-style-type: none;">
-                        <li>5 Predictions/Day</li>
+                        <li>1 Predictions/Day</li>
                         <li>Random 1 Stock Predicion send on Email/Week</li>
                       </ul>
                       <a class="btn btn-success btn-primary selected" id="btn-1">Selected</a>
@@ -141,7 +149,7 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
                       <h5 class="card-title">Pro</h5>
                       <p class="card-text">$19/month</p>
                       <ul class="card-featues" style="list-style-type: none;">
-                        <li>20 Predictions/Day</li>
+                        <li>2 Predictions/Day</li>
                         <li>Random 2 Stock Predicion send on Email/Week</li>
                       </ul>
                       <a class="btn btn-primary selected" id="btn-2">Select</a>
@@ -154,7 +162,7 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
                       <h5 class="card-title">Enterprise</h5>
                       <p class="card-text">$49/month</p>
                       <ul class="card-featues" style="list-style-type: none;">
-                        <li>50 Predictions/Day</li>
+                        <li>5 Predictions/Day</li>
                         <li>Random 5 Stock Predicion send on Email/Week</li>
                       </ul>
                       <a class="btn btn-primary selected" id="btn-3">Select</a>
@@ -242,12 +250,12 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
 <div style="height:80vh;width:100%;">
 
 <div class="tradingview-widget-container container mt-5" style="height:100%;width:100%">
-    <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+    <div class="tradingview-widget-container__widget" id="chartDiv" style="height:calc(100% - 32px);width:100%"></div>
     
-    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+    <!-- <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
     {
     "autosize": true,
-    "symbol": "BSE:{{ticker}}",
+    "symbol": "NASDAQ:{{ticker}}",
     "interval": "D",
     "timezone": "Asia/Kolkata",
     "theme": "dark",
@@ -263,7 +271,10 @@ background: linear-gradient(179deg, rgba(0,0,0,1) 0%, rgba(9,9,9,1) 1%); */
     "popup_height": "650",
     "support_host": "https://www.tradingview.com"
   }
-    </script>
+    </script> -->
+
+
+    
   </div>
  
 
@@ -468,9 +479,19 @@ const layout = {
     title: 'Stock Price'
   }
 };
+const layout2 = {
+  title: 'Stock Price',
+  xaxis: {
+    title: 'Date'
+  },
+  yaxis: {
+    title: 'Stock Price'
+  }
+};
 
 var dataa = [trace,price_trace];
-
+var stock_raw_price = [price_trace,];
+Plotly.newPlot('chartDiv',stock_raw_price,layout2);
 Plotly.newPlot('myDiv', dataa, layout);
 $("#watch").click(function(){
 // alert("hi"); 

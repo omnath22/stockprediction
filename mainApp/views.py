@@ -462,41 +462,53 @@ def selectPlan(request):
                 if is_ajax(request=request):
                     print("inside plan to be selected")
                     try:
-                        formatted_date_str = date.today().strftime("%Y-%m-%d") 
-                        
-                        # Parse the formatted string into a date object
-                        date_obj = date.fromisoformat(formatted_date_str)
+                        #first check if plans are same or below if both then show error 
+                        sql = "SELECT plan FROM auth_user WHERE username=%s"
+                        cursor3 = connection.cursor()
+                        cursor3.execute(sql,(request.user,))
+                        myresult = cursor3.fetchone()
+                        print(myresult[0])
+                        if myresult[0] == plan:
+                            return JsonResponse({"message": "Plans cannot be upgraded to same plan","status":"error"})
+                        elif myresult[0] == "Enterprise" and plan == "Pro" or myresult[0] == "Pro" and plan == "Basic":
+                            return JsonResponse({"message": "Plans cannot be downgraded they can only be upgraded","status":"error"})
+                        else:
 
-                        # Use timedelta to add one month
-                        one_month_delta = timedelta(days = 31)  # Adjust for months with less than 31 days if needed
+                            formatted_date_str = date.today().strftime("%Y-%m-%d") 
+                            
+                            # Parse the formatted string into a date object
+                            date_obj = date.fromisoformat(formatted_date_str)
 
-                        # Calculate the date one month ahead (considering potential adjustments)
-                        next_month_date = date_obj + one_month_delta
+                            # Use timedelta to add one month
+                            one_month_delta = timedelta(days = 31)  # Adjust for months with less than 31 days if needed
 
-                        # Handle cases where the next month might have less days than the current month's day
-                        if next_month_date.day > date_obj.day:
-                        # Set the day to the last day of the next month
-                            next_month_date = next_month_date.replace(day=28)  # Start with 28 to handle February
-                            while next_month_date.month == date_obj.month + 1:  # Loop until it's actually next month
-                                next_month_date = next_month_date.replace(day=next_month_date.day - 1)
+                            # Calculate the date one month ahead (considering potential adjustments)
+                            next_month_date = date_obj + one_month_delta
 
-                        # Format the resulting date object back to the desired string
-                        new_formatted_date_str = next_month_date.strftime("%Y-%m-%d")
+                            # Handle cases where the next month might have less days than the current month's day
+                            if next_month_date.day > date_obj.day:
+                            # Set the day to the last day of the next month
+                                next_month_date = next_month_date.replace(day=28)  # Start with 28 to handle February
+                                while next_month_date.month == date_obj.month + 1:  # Loop until it's actually next month
+                                    next_month_date = next_month_date.replace(day=next_month_date.day - 1)
 
-                        # Print the new formatted date string
-                        print(new_formatted_date_str)
-                        sql = "UPDATE auth_user SET plan = %s,dateofpayment = %s,duedateofpayment = %s WHERE username = %s"
-                        val = (plan,formatted_date_str,new_formatted_date_str,request.user)  # Replace with actual values
-                        mycursor = connection.cursor()
-                        # Execute the update query
-                        mycursor.execute(sql, val)
-                        connection.commit()
-                        print("successfully updated your plan")
-                        return JsonResponse({"message": f"Plan Upgraded to {plan}","status":"ok"})
-                        # print(request.user)
+                            # Format the resulting date object back to the desired string
+                            new_formatted_date_str = next_month_date.strftime("%Y-%m-%d")
+
+                            # Print the new formatted date string
+                            print(new_formatted_date_str)
+                            sql = "UPDATE auth_user SET plan = %s,dateofpayment = %s,duedateofpayment = %s,totalPrediction = %s WHERE username = %s"
+                            val = (plan,formatted_date_str,new_formatted_date_str,0,request.user)  # Replace with actual values
+                            mycursor = connection.cursor()
+                            # Execute the update query
+                            mycursor.execute(sql, val)
+                            connection.commit()
+                            print("successfully updated your plan")
+                            return JsonResponse({"message": f"Plan Upgraded to {plan}","status":"ok"})
+                            # print(request.user)
                     except Exception as e:
                         print(e)
-                        
+                    
 
 
 
@@ -588,11 +600,11 @@ def details(request):
                 #check if user exceed their limit if yes then redirect with message
                 #you have exceeded your limit upgrade
                 if myresult[1] == "Basic":
-                    myr = 4
+                    myr = 0
                 elif myresult[1] == "Pro":
-                    myr = 19
+                    myr = 1
                 else:
-                    myr = 49
+                    myr = 4
                 
                 if myresult[0] > myr:
                     messages.success(request,'You Have exceeded your limit upgrade your plan')
@@ -610,7 +622,7 @@ def details(request):
                 else:
                     tk = (request.GET['tickername'])
                     tkres = tk  + ".BO"
-                    ticker = yf.Ticker(tkres)
+                    ticker = yf.Ticker(tk)
                     try:
                         ticker.info['currentPrice']
                     except Exception as e:
@@ -755,7 +767,7 @@ def details(request):
                         data = yf.download(ticker, START, TODAY)
                         data.reset_index(inplace=True)
                         return data
-                    data = load_data(tkres)
+                    data = load_data(tk)
                     c_data = data
                     print(data)
                     df_train = data[['Date','Close']]
@@ -836,7 +848,7 @@ def details(request):
                     # }
                     params = {
                         'q': tk,  # Company name to search for
-                        'from': '2024-02-20',
+                        'from': '2024-03-20',
                         'apiKey': '7919e2baf4204e35ad417533b496a930',   # Your News API key
                         'pageSize': 5
 
@@ -932,8 +944,9 @@ def watchlist(request):
     data = {}
     if myresult:
         for i in myresult:
-            tkres = i[0]  + ".BO"
-            ticker = yf.Ticker(tkres)
+            # tkres = i[0]  + ".BO"
+            tk1 = i[0]
+            ticker = yf.Ticker(tk1)
             # print(ticker.info)
             # tickercurrentprice = ticker.info['currentPrice']
             # tickerchangefrompreviousclosepercentage = round((((ticker.info['currentPrice'] - ticker.info['previousClose'])/ticker.info['previousClose'] )* 100), 2)
@@ -959,7 +972,7 @@ def watchlist(request):
             # longName = ticker.info['longName']
             data[i[0]] = {
                     'symbol':i[0],
-                    'longName': ticker.info['longName'],
+                    'longName': ticker.info.get('longName', ''),
                     'currentPrice': "₹" +str(ticker.info['currentPrice']),
                     'previousClose': ticker.info['previousClose'],
                     'changeFromPreviousClose': round(ticker.info['currentPrice'] - ticker.info['previousClose'], 2),
